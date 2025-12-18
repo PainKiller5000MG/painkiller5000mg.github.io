@@ -1,337 +1,521 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>WolvenLabs Color Palettes</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WolvenLabs Color Palettes - Interactive</title>
     <style>
-        body { 
-            background: #f0f0f0; 
-            padding: 20px;
-            font-family: Arial, sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .palette {
-            margin: 40px auto;
-            max-width: 800px;
-            background: white;
+        
+        body {
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
             padding: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: clamp(24px, 5vw, 42px);
+            margin-bottom: 12px;
+            color: #0D0D0D;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            text-align: center;
+            font-size: clamp(14px, 2.5vw, 18px);
+            color: #6B6B6B;
+            margin-bottom: 40px;
+        }
+        
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+        
+        .palette-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .palette-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .palette-card.recommended {
+            border: 3px solid #6366F1;
+            position: relative;
+        }
+        
+        .palette-card.recommended::before {
+            content: "⭐ RECOMMENDED";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #6366F1;
+            color: white;
+            padding: 4px 16px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        
+        .palette-title {
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0D0D0D;
+        }
+        
+        .palette-description {
+            font-size: 14px;
+            color: #6B6B6B;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        
+        .theme-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .theme-section {
+            text-align: center;
+        }
+        
+        .theme-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            color: #3D3D3D;
+        }
+        
+        .color-swatch {
+            width: 100%;
+            height: 60px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            border: 2px solid rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s ease;
+        }
+        
+        .color-swatch:hover {
+            transform: scale(1.05);
+        }
+        
+        .color-code {
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            color: #6B6B6B;
+            margin-bottom: 4px;
+        }
+        
+        .color-name {
+            font-size: 10px;
+            color: #A8A8A8;
+        }
+        
+        .button-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            
+            .palette-card {
+                padding: 20px;
+            }
+            
+            .theme-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .color-swatch {
+                height: 50px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .palette-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            
+            .palette-card {
+                padding: 16px;
+            }
+        }
+        
+        .full-preview {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            margin-top: 40px;
+        }
+        
+        .full-preview h2 {
+            font-size: clamp(20px, 4vw, 32px);
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        
+        .preview-card {
             border-radius: 12px;
+            padding: 32px;
+            min-height: 300px;
+        }
+        
+        .preview-card h3 {
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .preview-card p {
+            font-size: 16px;
+            line-height: 1.6;
+            opacity: 0.9;
         }
     </style>
 </head>
 <body>
-    <h1 style="text-align: center;">WolvenLabs Color Palette Options</h1>
-    
-    <div class="palette">
-        <!-- Paste Option 1 SVG here --><svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Light Theme Section -->
-  <rect width="400" height="600" fill="#FAFAF9"/>
-  <text x="200" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#0D0D0D">LIGHT THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="50" y="70" width="300" height="60" fill="#FAFAF9" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Primary: #FAFAF9</text>
-  
-  <rect x="50" y="140" width="300" height="60" fill="#F5F1ED" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Elevated: #F5F1ED</text>
-  
-  <rect x="50" y="210" width="300" height="60" fill="#4A5568"/>
-  <text x="200" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #4A5568 (Slate)</text>
-  
-  <rect x="50" y="280" width="300" height="60" fill="#0D0D0D"/>
-  <text x="200" y="318" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Text: #0D0D0D (Black)</text>
-  
-  <!-- Button Example -->
-  <rect x="120" y="370" width="160" height="50" rx="12" fill="#4A5568"/>
-  <text x="200" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="120" y="440" width="160" height="50" rx="12" fill="none" stroke="#4A5568" stroke-width="2"/>
-  <text x="200" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#4A5568">Secondary</text>
-  
-  <!-- Dark Theme Section -->
-  <rect x="400" width="400" height="600" fill="#0D0D0D"/>
-  <text x="600" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#F5F5F5">DARK THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="450" y="70" width="300" height="60" fill="#0D0D0D" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Primary: #0D0D0D</text>
-  
-  <rect x="450" y="140" width="300" height="60" fill="#1A1A1A" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Elevated: #1A1A1A</text>
-  
-  <rect x="450" y="210" width="300" height="60" fill="#E2E8F0"/>
-  <text x="600" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#0D0D0D">Accent: #E2E8F0 (Light Slate)</text>
-  
-  <rect x="450" y="280" width="300" height="60" fill="#F5F5F5"/>
-  <text x="600" y="318" font-family="monospace" font-size="12" text-anchor="middle" fill="#0D0D0D">Text: #F5F5F5 (White)</text>
-  
-  <!-- Button Example -->
-  <rect x="520" y="370" width="160" height="50" rx="12" fill="#E2E8F0"/>
-  <text x="600" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#0D0D0D">Primary Button</text>
-  
-  <rect x="520" y="440" width="160" height="50" rx="12" fill="none" stroke="#E2E8F0" stroke-width="2"/>
-  <text x="600" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#E2E8F0">Secondary</text>
-  
-  <!-- Label -->
-  <text x="400" y="580" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6B6B6B">Option 1: Platinum & Obsidian (Monochromatic Luxury)</text>
-</svg>
-
+    <div class="container">
+        <h1>WolvenLabs Color Palette Options</h1>
+        <p class="subtitle">Choose your brand's visual identity - Tap to explore each option</p>
+        
+        <div class="palette-grid">
+            
+            <!-- Option 1: Platinum & Obsidian -->
+            <div class="palette-card" onclick="showFullPreview('platinum')">
+                <div class="palette-title">Platinum & Obsidian</div>
+                <div class="palette-description">Ultra-minimal, timeless, architect-level sophistication. Pure monochromatic luxury.</div>
+                
+                <div class="theme-row">
+                    <div class="theme-section">
+                        <div class="theme-label">Light Theme</div>
+                        <div class="color-swatch" style="background: #FAFAF9;"></div>
+                        <div class="color-code">#FAFAF9</div>
+                        <div class="color-name">Ivory</div>
+                        
+                        <div class="color-swatch" style="background: #4A5568;"></div>
+                        <div class="color-code">#4A5568</div>
+                        <div class="color-name">Slate Accent</div>
+                    </div>
+                    
+                    <div class="theme-section">
+                        <div class="theme-label">Dark Theme</div>
+                        <div class="color-swatch" style="background: #0D0D0D;"></div>
+                        <div class="color-code">#0D0D0D</div>
+                        <div class="color-name">Deep Black</div>
+                        
+                        <div class="color-swatch" style="background: #E2E8F0;"></div>
+                        <div class="color-code">#E2E8F0</div>
+                        <div class="color-name">Light Slate</div>
+                    </div>
+                </div>
+                
+                <div class="button-preview">
+                    <div class="btn" style="background: #4A5568; color: white;">Primary Button</div>
+                    <div class="btn" style="background: transparent; border-color: #4A5568; color: #4A5568;">Secondary</div>
+                </div>
+            </div>
+            
+            <!-- Option 2: Midnight Violet -->
+            <div class="palette-card recommended" onclick="showFullPreview('violet')">
+                <div class="palette-title">Midnight Violet</div>
+                <div class="palette-description">Royal, creative-tech luxury. Purple bridges artistic design and technical precision perfectly.</div>
+                
+                <div class="theme-row">
+                    <div class="theme-section">
+                        <div class="theme-label">Light Theme</div>
+                        <div class="color-swatch" style="background: #FAFAF9;"></div>
+                        <div class="color-code">#FAFAF9</div>
+                        <div class="color-name">Ivory</div>
+                        
+                        <div class="color-swatch" style="background: #6366F1;"></div>
+                        <div class="color-code">#6366F1</div>
+                        <div class="color-name">Electric Indigo</div>
+                        
+                        <div class="color-swatch" style="background: #8B5CF6;"></div>
+                        <div class="color-code">#8B5CF6</div>
+                        <div class="color-name">Rich Violet</div>
+                    </div>
+                    
+                    <div class="theme-section">
+                        <div class="theme-label">Dark Theme</div>
+                        <div class="color-swatch" style="background: #0D0D0D;"></div>
+                        <div class="color-code">#0D0D0D</div>
+                        <div class="color-name">Deep Black</div>
+                        
+                        <div class="color-swatch" style="background: #818CF8;"></div>
+                        <div class="color-code">#818CF8</div>
+                        <div class="color-name">Bright Indigo</div>
+                        
+                        <div class="color-swatch" style="background: #A78BFA;"></div>
+                        <div class="color-code">#A78BFA</div>
+                        <div class="color-name">Light Violet</div>
+                    </div>
+                </div>
+                
+                <div class="button-preview">
+                    <div class="btn" style="background: #6366F1; color: white;">Primary Button</div>
+                    <div class="btn" style="background: transparent; border-color: #6366F1; color: #6366F1;">Secondary</div>
+                </div>
+            </div>
+            
+            <!-- Option 3: Emerald Power -->
+            <div class="palette-card" onclick="showFullPreview('emerald')">
+                <div class="palette-title">Emerald Power</div>
+                <div class="palette-description">Grounded luxury, growth, sophisticated wealth. Old-money elegance with natural richness.</div>
+                
+                <div class="theme-row">
+                    <div class="theme-section">
+                        <div class="theme-label">Light Theme</div>
+                        <div class="color-swatch" style="background: #FAFAF9;"></div>
+                        <div class="color-code">#FAFAF9</div>
+                        <div class="color-name">Ivory</div>
+                        
+                        <div class="color-swatch" style="background: #047857;"></div>
+                        <div class="color-code">#047857</div>
+                        <div class="color-name">Deep Emerald</div>
+                        
+                        <div class="color-swatch" style="background: #059669;"></div>
+                        <div class="color-code">#059669</div>
+                        <div class="color-name">Forest Green</div>
+                    </div>
+                    
+                    <div class="theme-section">
+                        <div class="theme-label">Dark Theme</div>
+                        <div class="color-swatch" style="background: #0D0D0D;"></div>
+                        <div class="color-code">#0D0D0D</div>
+                        <div class="color-name">Deep Black</div>
+                        
+                        <div class="color-swatch" style="background: #10B981;"></div>
+                        <div class="color-code">#10B981</div>
+                        <div class="color-name">Bright Emerald</div>
+                        
+                        <div class="color-swatch" style="background: #34D399;"></div>
+                        <div class="color-code">#34D399</div>
+                        <div class="color-name">Light Emerald</div>
+                    </div>
+                </div>
+                
+                <div class="button-preview">
+                    <div class="btn" style="background: #047857; color: white;">Primary Button</div>
+                    <div class="btn" style="background: transparent; border-color: #047857; color: #047857;">Secondary</div>
+                </div>
+            </div>
+            
+            <!-- Option 4: Crimson Velvet -->
+            <div class="palette-card" onclick="showFullPreview('crimson')">
+                <div class="palette-title">Crimson Velvet</div>
+                <div class="palette-description">Bold, confident, dramatic elegance. High-fashion luxury with commanding presence.</div>
+                
+                <div class="theme-row">
+                    <div class="theme-section">
+                        <div class="theme-label">Light Theme</div>
+                        <div class="color-swatch" style="background: #FAFAF9;"></div>
+                        <div class="color-code">#FAFAF9</div>
+                        <div class="color-name">Ivory</div>
+                        
+                        <div class="color-swatch" style="background: #7C2D12;"></div>
+                        <div class="color-code">#7C2D12</div>
+                        <div class="color-name">Deep Burgundy</div>
+                        
+                        <div class="color-swatch" style="background: #991B1B;"></div>
+                        <div class="color-code">#991B1B</div>
+                        <div class="color-name">Wine Red</div>
+                    </div>
+                    
+                    <div class="theme-section">
+                        <div class="theme-label">Dark Theme</div>
+                        <div class="color-swatch" style="background: #0D0D0D;"></div>
+                        <div class="color-code">#0D0D0D</div>
+                        <div class="color-name">Deep Black</div>
+                        
+                        <div class="color-swatch" style="background: #DC2626;"></div>
+                        <div class="color-code">#DC2626</div>
+                        <div class="color-name">Bright Red</div>
+                        
+                        <div class="color-swatch" style="background: #EF4444;"></div>
+                        <div class="color-code">#EF4444</div>
+                        <div class="color-name">Vivid Red</div>
+                    </div>
+                </div>
+                
+                <div class="button-preview">
+                    <div class="btn" style="background: #7C2D12; color: white;">Primary Button</div>
+                    <div class="btn" style="background: transparent; border-color: #7C2D12; color: #7C2D12;">Secondary</div>
+                </div>
+            </div>
+            
+            <!-- Option 5: Steel Blue -->
+            <div class="palette-card" onclick="showFullPreview('steel')">
+                <div class="palette-title">Steel Blue</div>
+                <div class="palette-description">Modern sophistication, technical precision, cool elegance. Tech-forward luxury.</div>
+                
+                <div class="theme-row">
+                    <div class="theme-section">
+                        <div class="theme-label">Light Theme</div>
+                        <div class="color-swatch" style="background: #FAFAF9;"></div>
+                        <div class="color-code">#FAFAF9</div>
+                        <div class="color-name">Ivory</div>
+                        
+                        <div class="color-swatch" style="background: #0F172A;"></div>
+                        <div class="color-code">#0F172A</div>
+                        <div class="color-name">Slate Navy</div>
+                        
+                        <div class="color-swatch" style="background: #334155;"></div>
+                        <div class="color-code">#334155</div>
+                        <div class="color-name">Cool Slate</div>
+                    </div>
+                    
+                    <div class="theme-section">
+                        <div class="theme-label">Dark Theme</div>
+                        <div class="color-swatch" style="background: #0D0D0D;"></div>
+                        <div class="color-code">#0D0D0D</div>
+                        <div class="color-name">Deep Black</div>
+                        
+                        <div class="color-swatch" style="background: #3B82F6;"></div>
+                        <div class="color-code">#3B82F6</div>
+                        <div class="color-name">Electric Blue</div>
+                        
+                        <div class="color-swatch" style="background: #60A5FA;"></div>
+                        <div class="color-code">#60A5FA</div>
+                        <div class="color-name">Sky Blue</div>
+                    </div>
+                </div>
+                
+                <div class="button-preview">
+                    <div class="btn" style="background: #0F172A; color: white;">Primary Button</div>
+                    <div class="btn" style="background: transparent; border-color: #0F172A; color: #0F172A;">Secondary</div>
+                </div>
+            </div>
+            
+        </div>
+        
+        <!-- Full Preview Section -->
+        <div class="full-preview" id="fullPreview" style="display: none;">
+            <h2 id="previewTitle">Full Theme Preview</h2>
+            <div class="preview-grid">
+                <div class="preview-card" id="lightPreview">
+                    <h3>Light Theme Experience</h3>
+                    <p>This is how your brand will look in light mode. Clean, professional, and approachable for daytime use and printed materials.</p>
+                    <div class="btn" id="lightBtn" style="margin-top: 20px;">Explore Light</div>
+                </div>
+                <div class="preview-card" id="darkPreview">
+                    <h3>Dark Theme Experience</h3>
+                    <p>This is how your brand will look in dark mode. Dramatic, premium, and perfect for evening browsing and developer tools.</p>
+                    <div class="btn" id="darkBtn" style="margin-top: 20px;">Explore Dark</div>
+                </div>
+            </div>
+        </div>
+        
     </div>
     
-    <div class="palette">
-        <!-- Paste Option 2 SVG here --><svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Light Theme Section -->
-  <rect width="400" height="600" fill="#FAFAF9"/>
-  <text x="200" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#0D0D0D">LIGHT THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="50" y="70" width="300" height="60" fill="#FAFAF9" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Primary: #FAFAF9</text>
-  
-  <rect x="50" y="140" width="300" height="60" fill="#F5F1ED" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Elevated: #F5F1ED</text>
-  
-  <rect x="50" y="210" width="300" height="60" fill="#6366F1"/>
-  <text x="200" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #6366F1 (Electric Indigo)</text>
-  
-  <rect x="50" y="280" width="150" height="60" fill="#8B5CF6"/>
-  <text x="125" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Violet: #8B5CF6</text>
-  
-  <rect x="200" y="280" width="150" height="60" fill="#0D0D0D"/>
-  <text x="275" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Text: #0D0D0D</text>
-  
-  <!-- Button Example -->
-  <rect x="120" y="370" width="160" height="50" rx="12" fill="#6366F1"/>
-  <text x="200" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="120" y="440" width="160" height="50" rx="12" fill="none" stroke="#6366F1" stroke-width="2"/>
-  <text x="200" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#6366F1">Secondary</text>
-  
-  <!-- Dark Theme Section -->
-  <rect x="400" width="400" height="600" fill="#0D0D0D"/>
-  <text x="600" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#F5F5F5">DARK THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="450" y="70" width="300" height="60" fill="#0D0D0D" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Primary: #0D0D0D</text>
-  
-  <rect x="450" y="140" width="300" height="60" fill="#1A1A1A" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Elevated: #1A1A1A</text>
-  
-  <rect x="450" y="210" width="300" height="60" fill="#818CF8"/>
-  <text x="600" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#0D0D0D">Accent: #818CF8 (Bright Indigo)</text>
-  
-  <rect x="450" y="280" width="150" height="60" fill="#A78BFA"/>
-  <text x="525" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Violet: #A78BFA</text>
-  
-  <rect x="600" y="280" width="150" height="60" fill="#F5F5F5"/>
-  <text x="675" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Text: #F5F5F5</text>
-  
-  <!-- Button Example with Glow -->
-  <defs>
-    <filter id="glow">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-  <rect x="520" y="370" width="160" height="50" rx="12" fill="#818CF8" filter="url(#glow)"/>
-  <text x="600" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#0D0D0D">Primary Button</text>
-  
-  <rect x="520" y="440" width="160" height="50" rx="12" fill="none" stroke="#818CF8" stroke-width="2"/>
-  <text x="600" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#818CF8">Secondary</text>
-  
-  <!-- Label -->
-  <text x="400" y="580" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6B6B6B">Option 2: Midnight Violet ⭐ RECOMMENDED</text>
-</svg>
-
-    </div>
-    
-    <div class="palette">
-        <!-- Paste Option 3 SVG here --><svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Light Theme Section -->
-  <rect width="400" height="600" fill="#FAFAF9"/>
-  <text x="200" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#0D0D0D">LIGHT THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="50" y="70" width="300" height="60" fill="#FAFAF9" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Primary: #FAFAF9</text>
-  
-  <rect x="50" y="140" width="300" height="60" fill="#F5F1ED" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Elevated: #F5F1ED</text>
-  
-  <rect x="50" y="210" width="300" height="60" fill="#047857"/>
-  <text x="200" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #047857 (Deep Emerald)</text>
-  
-  <rect x="50" y="280" width="150" height="60" fill="#059669"/>
-  <text x="125" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Green: #059669</text>
-  
-  <rect x="200" y="280" width="150" height="60" fill="#0D0D0D"/>
-  <text x="275" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Text: #0D0D0D</text>
-  
-  <!-- Button Example -->
-  <rect x="120" y="370" width="160" height="50" rx="12" fill="#047857"/>
-  <text x="200" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="120" y="440" width="160" height="50" rx="12" fill="none" stroke="#047857" stroke-width="2"/>
-  <text x="200" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#047857">Secondary</text>
-  
-  <!-- Dark Theme Section -->
-  <rect x="400" width="400" height="600" fill="#0D0D0D"/>
-  <text x="600" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#F5F5F5">DARK THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="450" y="70" width="300" height="60" fill="#0D0D0D" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Primary: #0D0D0D</text>
-  
-  <rect x="450" y="140" width="300" height="60" fill="#1A1A1A" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Elevated: #1A1A1A</text>
-  
-  <rect x="450" y="210" width="300" height="60" fill="#10B981"/>
-  <text x="600" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#0D0D0D">Accent: #10B981 (Bright Emerald)</text>
-  
-  <rect x="450" y="280" width="150" height="60" fill="#34D399"/>
-  <text x="525" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Light: #34D399</text>
-  
-  <rect x="600" y="280" width="150" height="60" fill="#F5F5F5"/>
-  <text x="675" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Text: #F5F5F5</text>
-  
-  <!-- Button Example -->
-  <rect x="520" y="370" width="160" height="50" rx="12" fill="#10B981"/>
-  <text x="600" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#0D0D0D">Primary Button</text>
-  
-  <rect x="520" y="440" width="160" height="50" rx="12" fill="none" stroke="#10B981" stroke-width="2"/>
-  <text x="600" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#10B981">Secondary</text>
-  
-  <!-- Label -->
-  <text x="400" y="580" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6B6B6B">Option 3: Emerald Power (Old-Money Luxury)</text>
-</svg>
-
-    </div>
-    
-    <div class="palette">
-        <!-- Paste Option 4 SVG here --><svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Light Theme Section -->
-  <rect width="400" height="600" fill="#FAFAF9"/>
-  <text x="200" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#0D0D0D">LIGHT THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="50" y="70" width="300" height="60" fill="#FAFAF9" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Primary: #FAFAF9</text>
-  
-  <rect x="50" y="140" width="300" height="60" fill="#F5F1ED" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Elevated: #F5F1ED</text>
-  
-  <rect x="50" y="210" width="300" height="60" fill="#7C2D12"/>
-  <text x="200" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #7C2D12 (Deep Burgundy)</text>
-  
-  <rect x="50" y="280" width="150" height="60" fill="#991B1B"/>
-  <text x="125" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Wine: #991B1B</text>
-  
-  <rect x="200" y="280" width="150" height="60" fill="#0D0D0D"/>
-  <text x="275" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Text: #0D0D0D</text>
-  
-  <!-- Button Example -->
-  <rect x="120" y="370" width="160" height="50" rx="12" fill="#7C2D12"/>
-  <text x="200" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="120" y="440" width="160" height="50" rx="12" fill="none" stroke="#7C2D12" stroke-width="2"/>
-  <text x="200" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#7C2D12">Secondary</text>
-  
-  <!-- Dark Theme Section -->
-  <rect x="400" width="400" height="600" fill="#0D0D0D"/>
-  <text x="600" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#F5F5F5">DARK THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="450" y="70" width="300" height="60" fill="#0D0D0D" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Primary: #0D0D0D</text>
-  
-  <rect x="450" y="140" width="300" height="60" fill="#1A1A1A" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Elevated: #1A1A1A</text>
-  
-  <rect x="450" y="210" width="300" height="60" fill="#DC2626"/>
-  <text x="600" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #DC2626 (Bright Red)</text>
-  
-  <rect x="450" y="280" width="150" height="60" fill="#EF4444"/>
-  <text x="525" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Vivid: #EF4444</text>
-  
-  <rect x="600" y="280" width="150" height="60" fill="#F5F5F5"/>
-  <text x="675" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Text: #F5F5F5</text>
-  
-  <!-- Button Example -->
-  <rect x="520" y="370" width="160" height="50" rx="12" fill="#DC2626"/>
-  <text x="600" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="520" y="440" width="160" height="50" rx="12" fill="none" stroke="#DC2626" stroke-width="2"/>
-  <text x="600" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#DC2626">Secondary</text>
-  
-  <!-- Label -->
-  <text x="400" y="580" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6B6B6B">Option 4: Crimson Velvet (Bold Power Luxury)</text>
-</svg>
-
-    </div>
-    
-    <div class="palette">
-        <!-- Paste Option 5 SVG here --><svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
-  <!-- Light Theme Section -->
-  <rect width="400" height="600" fill="#FAFAF9"/>
-  <text x="200" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#0D0D0D">LIGHT THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="50" y="70" width="300" height="60" fill="#FAFAF9" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Primary: #FAFAF9</text>
-  
-  <rect x="50" y="140" width="300" height="60" fill="#F5F1ED" stroke="#E8E4DF" stroke-width="2"/>
-  <text x="200" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#3D3D3D">BG Elevated: #F5F1ED</text>
-  
-  <rect x="50" y="210" width="300" height="60" fill="#0F172A"/>
-  <text x="200" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #0F172A (Slate Navy)</text>
-  
-  <rect x="50" y="280" width="150" height="60" fill="#334155"/>
-  <text x="125" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Slate: #334155</text>
-  
-  <rect x="200" y="280" width="150" height="60" fill="#0D0D0D"/>
-  <text x="275" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#FFFFFF">Text: #0D0D0D</text>
-  
-  <!-- Button Example -->
-  <rect x="120" y="370" width="160" height="50" rx="12" fill="#0F172A"/>
-  <text x="200" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="120" y="440" width="160" height="50" rx="12" fill="none" stroke="#0F172A" stroke-width="2"/>
-  <text x="200" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#0F172A">Secondary</text>
-  
-  <!-- Dark Theme Section -->
-  <rect x="400" width="400" height="600" fill="#0D0D0D"/>
-  <text x="600" y="40" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#F5F5F5">DARK THEME</text>
-  
-  <!-- Color Swatches -->
-  <rect x="450" y="70" width="300" height="60" fill="#0D0D0D" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="108" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Primary: #0D0D0D</text>
-  
-  <rect x="450" y="140" width="300" height="60" fill="#1A1A1A" stroke="#2A2A2A" stroke-width="2"/>
-  <text x="600" y="178" font-family="monospace" font-size="12" text-anchor="middle" fill="#A8A8A8">BG Elevated: #1A1A1A</text>
-  
-  <rect x="450" y="210" width="300" height="60" fill="#3B82F6"/>
-  <text x="600" y="248" font-family="monospace" font-size="12" text-anchor="middle" fill="#FFFFFF">Accent: #3B82F6 (Electric Blue)</text>
-  
-  <rect x="450" y="280" width="150" height="60" fill="#60A5FA"/>
-  <text x="525" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Sky: #60A5FA</text>
-  
-  <rect x="600" y="280" width="150" height="60" fill="#F5F5F5"/>
-  <text x="675" y="318" font-family="monospace" font-size="11" text-anchor="middle" fill="#0D0D0D">Text: #F5F5F5</text>
-  
-  <!-- Button Example -->
-  <rect x="520" y="370" width="160" height="50" rx="12" fill="#3B82F6"/>
-  <text x="600" y="400" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#FFFFFF">Primary Button</text>
-  
-  <rect x="520" y="440" width="160" height="50" rx="12" fill="none" stroke="#3B82F6" stroke-width="2"/>
-  <text x="600" y="470" font-family="Arial, sans-serif" font-size="16" font-weight="600" text-anchor="middle" fill="#3B82F6">Secondary</text>
-  
-  <!-- Label -->
-  <text x="400" y="580" font-family="Arial, sans-serif" font-size="14" text-anchor="middle" fill="#6B6B6B">Option 5: Steel Blue (Tech Luxury)</text>
-</svg>
-
-    </div>
+    <script>
+        function showFullPreview(theme) {
+            const preview = document.getElementById('fullPreview');
+            const title = document.getElementById('previewTitle');
+            const lightCard = document.getElementById('lightPreview');
+            const darkCard = document.getElementById('darkPreview');
+            const lightBtn = document.getElementById('lightBtn');
+            const darkBtn = document.getElementById('darkBtn');
+            
+            preview.style.display = 'block';
+            preview.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            
+            const themes = {
+                platinum: {
+                    title: 'Platinum & Obsidian Preview',
+                    light: { bg: '#FAFAF9', text: '#0D0D0D', accent: '#4A5568' },
+                    dark: { bg: '#0D0D0D', text: '#F5F5F5', accent: '#E2E8F0' }
+                },
+                violet: {
+                    title: 'Midnight Violet Preview ⭐',
+                    light: { bg: '#F5F1ED', text: '#0D0D0D', accent: '#6366F1' },
+                    dark: { bg: '#0D0D0D', text: '#F5F5F5', accent: '#818CF8' }
+                },
+                emerald: {
+                    title: 'Emerald Power Preview',
+                    light: { bg: '#F5F1ED', text: '#0D0D0D', accent: '#047857' },
+                    dark: { bg: '#0D0D0D', text: '#F5F5F5', accent: '#10B981' }
+                },
+                crimson: {
+                    title: 'Crimson Velvet Preview',
+                    light: { bg: '#F5F1ED', text: '#0D0D0D', accent: '#7C2D12' },
+                    dark: { bg: '#0D0D0D', text: '#F5F5F5', accent: '#DC2626' }
+                },
+                steel: {
+                    title: 'Steel Blue Preview',
+                    light: { bg: '#F5F1ED', text: '#0D0D0D', accent: '#0F172A' },
+                    dark: { bg: '#0D0D0D', text: '#F5F5F5', accent: '#3B82F6' }
+                }
+            };
+            
+            const selected = themes[theme];
+            title.textContent = selected.title;
+            
+            // Light theme card
+            lightCard.style.background = selected.light.bg;
+            lightCard.style.color = selected.light.text;
+            lightBtn.style.background = selected.light.accent;
+            lightBtn.style.color = '#FFFFFF';
+            
+            // Dark theme card
+            darkCard.style.background = selected.dark.bg;
+            darkCard.style.color = selected.dark.text;
+            darkBtn.style.background = selected.dark.accent;
+            darkBtn.style.color = selected.dark.bg;
+        }
+    </script>
 </body>
 </html>
